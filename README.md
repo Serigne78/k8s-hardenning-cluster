@@ -81,3 +81,26 @@ Log rotation is configured on the API server flags: `--audit-log-maxage=30`, `--
 **What it checks:** whether the kube-proxy metrics endpoint (port 10249) is bound to localhost rather than `0.0.0.0`.
 
 **Analysis:** this cluster runs **Cilium in kube-proxy replacement mode**, so kube-proxy is not present at all. Querying the endpoint from the node's network address confirms nothing is listening:
+
+
+
+### Pod Security Standards — restricted profile
+
+**Risk:** without admission control, any user able to create a pod can run a
+privileged container, mount the host filesystem, or share the host PID
+namespace — a direct path to node compromise.
+
+**Fix:** enforced the `restricted` Pod Security Standard at namespace level
+(manifest/pod-security/). Three modes are set — `enforce` blocks, `warn`
+messages the user, `audit` records to the audit log — which together allow a
+safe migration on an existing cluster.
+
+**Evidence:**
+- A privileged pod is rejected at admission with 5 violations listed
+  (report/pss-blocked-pod.txt).
+- A compliant pod (runAsNonRoot, seccomp RuntimeDefault, all capabilities
+  dropped) is admitted and runs.
+
+Note: PSS validates the *declared* security context, not the image itself —
+a pod declaring runAsNonRoot on a root image is admitted but fails at runtime
+with CreateContainerConfigError. The compliant example uses nginx-unprivileged.
