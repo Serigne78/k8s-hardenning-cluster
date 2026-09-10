@@ -1,0 +1,15 @@
+- rule: Cryptominer process launched in container
+  desc: Detect execution of known cryptomining binaries inside a container
+  condition: >
+    container
+    and evt.type = execve
+    and proc.name in (xmrig, minerd, cpuminer, ethminer, cgminer,
+                      bfgminer, xmr-stak, nbminer, t-rex, phoenixminer,
+                      lolminer, gminer, nanominer)
+  output: >
+    Cryptominer binary launched in container
+    (process=%proc.name cmdline=%proc.cmdline
+     container=%container.name image=%container.image.repository
+     pod=%k8s.pod.name ns=%k8s.ns.name user=%user.name)
+  priority: CRITICAL
+  tags: [container, process, cryptomining]
