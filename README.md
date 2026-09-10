@@ -139,4 +139,8 @@ attacker→backend link in red with every flow marked `dropped`.
 
 **Key insight:** the Hubble UI draws attempted connections, not just successful
 ones — a visible arrow is not proof of access. The verdict (FORWARDED vs
-DROPPED) is what matters. Always cross-check the graph with `hubble observe --verdict`.
+DROPPED) is what matters. Always cross-check the graph with `hubble observe --verdict.
+
+<img width="1914" height="895" alt="Capture d&#39;écran 2026-09-11 002053" src="https://github.com/user-attachments/assets/ca88350e-bb0a-4e82-adcb-82d0e4885f23" />
+
+
