@@ -112,12 +112,7 @@ with CreateContainerConfigError. The compliant example uses nginx-unprivileged.
 **Implementation:** Falco deployed as a DaemonSet with a modern eBPF probe, capturing syscalls cluster-wide. Two things demonstrated:
 
 1. **Default rules** — a `kubectl exec` shell and a read of `/etc/shadow` are both detected, with full process lineage (`cat` ← `bash` ← `containerd-shim`) and Kubernetes context (pod, namespace, image). See `report/falco-alerts.txt`.
-2. **Custom rule** — a CRITICAL rule detecting known cryptominer binaries (xmrig, minerd, etc.) launched inside a container, mapped to MITRE ATT&CK execution (`manifest/falco/custom-rules.yaml`).
+2. **Custom rule** — a CRITICAL rule detecting known cryptominer binaries (xmrig, minerd, etc.) launched inside a container, n (`manifest/falco/custom-rules.yaml`).
 
 **Known limitation:** name-based miner detection is evaded by renaming the binary. Behaviour-based detection (mining-pool connections, CPU anomalies) would be the production-grade follow-up.
 
-### CIS 1.2.5 — kubelet certificate authority: a documented trade-off
-
-This control makes the API server validate the kubelet's certificate. On this kubeadm install the kubelet certificate carries only `DNS:k3s` in its SANs — no node IP — so enabling the control breaks `kubectl exec`, `logs`, and `port-forward`, which reach the kubelet by IP.
-
-Two resolutions exist: regenerate the kubelet serving certificate with the node IP in its SANs (correct for production), or disable the control. On this single-node lab, where the kubelet-impersonation vector is theoretical, I disabled it and documented the trade-off. This is a deliberate engineering decision, not an oversight — a security control has an operational cost, and the right answer depends on the threat model.
