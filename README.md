@@ -116,3 +116,27 @@ with CreateContainerConfigError. The compliant example uses nginx-unprivileged.
 
 **Known limitation:** name-based miner detection is evaded by renaming the binary. Behaviour-based detection (mining-pool connections, CPU anomalies) would be the production-grade follow-up.
 
+### Network micro-segmentation — Cilium NetworkPolicies
+
+**Risk:** by default, Kubernetes allows all pod-to-pod traffic. Any compromised
+pod can reach every service in the cluster — unrestricted east-west movement,
+the primary vector for lateral movement after an initial breach.
+
+**Implementation:** a default-deny ingress policy closes all inbound traffic in
+the namespace, then a single explicit rule re-opens only `frontend → backend`
+on TCP/80, selected by pod label (manifest/network-policies/).
+
+**Evidence (verified two ways):**
+
+| Source | Destination | Result |
+|--------|-------------|--------|
+| frontend (app=frontend) | backend:80 | 200 — allowed |
+| attacker (app=attacker) | backend:80 | 000 timeout — dropped |
+
+Same destination, two verdicts, decided solely by pod label. Hubble confirms
+the drop at the network layer (report/hubble-dropped.txt) — the UI shows the
+attacker→backend link in red with every flow marked `dropped`.
+
+**Key insight:** the Hubble UI draws attempted connections, not just successful
+ones — a visible arrow is not proof of access. The verdict (FORWARDED vs
+DROPPED) is what matters. Always cross-check the graph with `hubble observe --verdict`.
