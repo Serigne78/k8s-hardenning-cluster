@@ -141,6 +141,11 @@ attacker→backend link in red with every flow marked `dropped`.
 ones — a visible arrow is not proof of access. The verdict (FORWARDED vs
 DROPPED) is what matters. Always cross-check the graph with `hubble observe --verdict.
 
-<img width="1914" height="895" alt="Capture d&#39;écran 2026-09-11 002053" src="https://github.com/user-attachments/assets/ca88350e-bb0a-4e82-adcb-82d0e4885f23" />
+<img width="1178" height="575" alt="Capture d&#39;écran 2026-09-11 000519" src="https://github.com/user-attachments/assets/dc037c97-4a86-4a99-bc1e-33f0bc763272" />
+
+<img width="1918" height="945" alt="Capture d&#39;écran 2026-09-11 002037" src="https://github.com/user-attachments/assets/ca44bd5c-e590-4433-b56f-2ef14632e52e" />
+
+<img width="1914" height="895" alt="Capture d&#39;écran 2026-09-11 002053" src="https://github.com/user-attachments/assets/638d3431-ef3d-459c-88e9-1898a47b9803" />
+
 
 
