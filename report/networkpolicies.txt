@@ -1,0 +1,3 @@
+NAME                        POD-SELECTOR   AGE
+allow-frontend-to-backend   app=backend    13m
+default-deny-ingress        <none>         20m
